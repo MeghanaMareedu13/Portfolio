@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Meghana Mareedu — Java Full‑Stack Developer</title>
+  <title>Meghana Mareedu — Java Full-Stack Developer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
@@ -23,11 +23,14 @@
     body{
       margin:0;color:var(--ink);
       font:400 16px/1.6 "Poppins",system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
-      background:radial-gradient(1200px 800px at 15% -10%,rgba(255,106,213,.18),transparent 60%),
-                 radial-gradient(1200px 900px at 110% 10%,rgba(123,223,242,.18),transparent 60%),
-                 linear-gradient(180deg,var(--bg-1),var(--bg-2));
+      background:
+        radial-gradient(1200px 800px at 15% -10%,rgba(255,106,213,.18),transparent 60%),
+        radial-gradient(1200px 900px at 110% 10%,rgba(123,223,242,.18),transparent 60%),
+        linear-gradient(180deg,var(--bg-1),var(--bg-2));
       background-attachment:fixed;overflow-x:hidden;
     }
+    /* lock scroll when menu is open */
+    body.menu-open{overflow:hidden}
 
     /* Animated conic shimmer */
     .motion-shine{position:fixed;inset:-20vh -20vw;z-index:-1;pointer-events:none;
@@ -49,13 +52,13 @@
 
     /* ======= Layout ======= */
     .site{max-width:1200px;margin:0 auto;padding:24px;position:relative}
-    .nav{position:sticky;top:14px;z-index:50;display:flex;align-items:center;gap:16px;justify-content:space-between;padding:14px 18px;border-radius:999px;backdrop-filter:blur(16px);background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.06));border:1px solid var(--stroke);box-shadow:var(--shadow-2)}
+    .nav{position:sticky;top:14px;z-index:70;display:flex;align-items:center;gap:16px;justify-content:space-between;padding:14px 18px;border-radius:999px;backdrop-filter:blur(16px);background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.06));border:1px solid var(--stroke);box-shadow:var(--shadow-2)}
     .brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.3px;white-space:nowrap}
     .brand .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--brand-1),var(--brand-2));box-shadow:0 0 0 4px rgba(255,255,255,.08) inset,0 0 18px rgba(255,106,213,.8)}
     .nav-links{display:flex;gap:6px;flex-wrap:nowrap;overflow:auto hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none}
     .nav-links::-webkit-scrollbar{display:none}
-    .nav a{color:var(--ink);text-decoration:none;font-weight:600;font-size:14px;padding:10px 14px;border-radius:12px;opacity:.9;white-space:nowrap}
-    .nav a:hover{background:rgba(255,255,255,.08);box-shadow:var(--ring)}
+    .nav a{color:var(--ink);text-decoration:none;font-weight:600;font-size:14px;padding:10px 14px;border-radius:12px;opacity:.95;white-space:nowrap}
+    .nav a:hover{background:rgba(255,255,255,.12);box-shadow:var(--ring)}
     .nav-cta{background:linear-gradient(135deg,var(--brand-1),var(--brand-2));color:#0b0b0b !important;border:0;box-shadow:0 10px 22px rgba(255,106,213,.35)}
 
     /* ======= Hero ======= */
@@ -141,28 +144,70 @@
       .site{padding:16px}
     }
 
-    /* Respect reduced motion */
+    /* Reduced motion */
     @media (prefers-reduced-motion:reduce){
       .motion-shine,.blob{animation:none !important}
       #fx{display:none}
       .cursor,.cursor-ring{display:none}
     }
-  /* ======= Mobile Menu ======= */
+
+    /* ======= Mobile Menu ======= */
     .menu-btn{display:none;position:relative;isolation:isolate;appearance:none;border:1px solid var(--stroke);background:rgba(255,255,255,.08);border-radius:12px;padding:10px 12px;cursor:pointer;box-shadow:var(--shadow-2)}
     .menu-bar{display:block;width:20px;height:2px;background:var(--ink);margin:4px 0;transition:transform .2s ease,opacity .2s ease}
     .menu-btn[aria-expanded="true"] .menu-bar:nth-child(1){transform:translateY(6px) rotate(45deg)}
     .menu-btn[aria-expanded="true"] .menu-bar:nth-child(2){opacity:0}
     .menu-btn[aria-expanded="true"] .menu-bar:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 
+    /* === Full-screen transparent blur backdrop === */
+    .menu-backdrop{
+      position:fixed; inset:0; z-index:50;
+      background:rgba(7,11,20,.35);                 /* lighter dim */
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
+      opacity:0; pointer-events:none; transition:opacity .2s ease;
+    }
+    .menu-open .menu-backdrop{opacity:1; pointer-events:auto}
+
+    /* === Mobile nav panel: glassy, tinted, transparent === */
     @media (max-width: 900px){
       .menu-btn{display:block}
       .nav{gap:10px}
-      .nav-links{position:absolute;left:16px;right:16px;top:calc(100% + 10px);display:none;flex-direction:column;gap:8px;padding:12px;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.06));border:1px solid var(--stroke);box-shadow:var(--shadow-1)}
-      .nav-links a{padding:10px 12px}
-      .nav-links.open{display:flex}
-    }
+      .nav-links{
+        position:absolute; left:16px; right:16px; top:calc(100% + 10px);
+        z-index:60; display:none; flex-direction:column; gap:10px; padding:14px;
+        border-radius:16px;
 
-    </style>
+        /* transparent blur + subtle brand tint */
+        background:
+          linear-gradient(180deg,
+            rgba(255,106,213,.06),
+            rgba(123,223,242,.04)
+          ),
+          rgba(12,16,32,.18);                       /* very transparent glass */
+        -webkit-backdrop-filter: blur(18px) saturate(125%);
+        backdrop-filter: blur(18px) saturate(125%);
+
+        border:1px solid rgba(255,255,255,.18);
+        box-shadow: 0 18px 44px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.06) inset;
+      }
+      .nav-links.open{display:flex}
+
+      /* Buttons: high-contrast glass chips */
+      .nav-links a{
+        font-weight:700; letter-spacing:.25px;
+        color:#fff; text-shadow:0 1px 0 rgba(0,0,0,.35);
+        background:rgba(255,255,255,.06);
+        border:1px solid rgba(255,255,255,.22);
+        border-radius:12px; padding:12px 14px;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+      }
+      .nav-links a:hover{
+        background:rgba(255,255,255,.12);
+        box-shadow:0 0 0 1px rgba(255,255,255,.28) inset;
+      }
+      .nav-links a:focus-visible{outline:2px solid #7BDFF2; outline-offset:2px}
+    }
+  </style>
 </head>
 <body>
   <canvas id="fx"></canvas>
@@ -174,6 +219,9 @@
   <!-- Custom Cursor (hidden on touch) -->
   <div class="cursor" id="cursor"></div>
   <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Backdrop for mobile nav -->
+  <div class="menu-backdrop" id="menuBackdrop" aria-hidden="true"></div>
 
   <div class="site">
     <nav class="nav" role="navigation">
@@ -200,9 +248,9 @@
     <!-- =============== HERO =============== -->
     <header class="hero" id="about">
       <div>
-        <span class="badge"><span class="ping"></span> Java Full‑Stack Developer • Spring Boot • Angular • AWS</span>
+        <span class="badge"><span class="ping"></span> Java Full-Stack Developer • Spring Boot • Angular • AWS</span>
         <h1>Building resilient, elegant products<br><span style="background:linear-gradient(135deg,var(--brand-1),var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent">with Java + Angular</span></h1>
-        <p class="lead">2.5+ years creating enterprise apps & APIs with Spring Boot, Angular, and cloud‑native tooling. I love clean architecture, observability, and shipping fast without breaking trust.</p>
+        <p class="lead">2.5+ years creating enterprise apps & APIs with Spring Boot, Angular, and cloud-native tooling. I love clean architecture, observability, and shipping fast without breaking trust.</p>
         <div class="cta-row">
           <a class="btn prime" href="#experience">See my experience</a>
           <a class="btn" href="https://www.linkedin.com/in/meghanamareedu" target="_blank" rel="noreferrer">LinkedIn</a>
@@ -274,7 +322,7 @@
                 <div class="p-title">What I built</div>
                 <ul>
                   <li>Interactive dashboards for application → approval → compliance.</li>
-                  <li>Role‑based views and exportable regulatory reports.</li>
+                  <li>Role-based views and exportable regulatory reports.</li>
                   <li>REST APIs with pagination, sorting, and JWT auth.</li>
                 </ul>
                 <div class="p-actions"><a class="btn" href="#" target="_blank" rel="noreferrer">GitHub</a><a class="btn prime" href="#" target="_blank" rel="noreferrer">Live</a></div>
@@ -332,19 +380,19 @@
       <h2 class="section-title">Professional Experience</h2>
       <div class="timeline">
         <div class="item">
-          <div class="role">Software Engineer — Java Full‑Stack <span class="pill">Fannie Mae, Plano, TX</span></div>
+          <div class="role">Software Engineer — Java Full-Stack <span class="pill">Fannie Mae, Plano, TX</span></div>
           <div class="meta">Loan & Mortgage Management • Jul 2025 – Present</div>
           <ul>
             <li>Develop and enhance REST APIs with Spring Boot for loan workflows (application → approval → compliance).</li>
             <li>Build Angular dashboards to track statuses and generate regulatory reports for underwriters/compliance officers.</li>
-            <li>Design and optimize PostgreSQL procedures to process high‑volume financial data securely and efficiently.</li>
+            <li>Design and optimize PostgreSQL procedures to process high-volume financial data securely and efficiently.</li>
             <li>Implement microservices with Spring Boot, Docker, AWS to ensure scalability and fault tolerance.</li>
             <li>Automate CI/CD via Jenkins and deploy on AWS EC2/S3; improve deployment speed and reliability.</li>
             <li>Write unit/integration tests using JUnit, Mockito, Postman for quality and compliance accuracy.</li>
           </ul>
         </div>
         <div class="item">
-          <div class="role">Software Developer Intern — Java Full‑Stack <span class="pill">Eli Lilly, Indianapolis, IN</span></div>
+          <div class="role">Software Developer Intern — Java Full-Stack <span class="pill">Eli Lilly, Indianapolis, IN</span></div>
           <div class="meta">Feb 2025 – May 2025</div>
           <ul>
             <li>Enhanced enterprise web apps with Spring Boot and REST APIs to improve backend performance and reliability.</li>
@@ -353,7 +401,7 @@
           </ul>
         </div>
         <div class="item">
-          <div class="role">Associate Software Engineer — Java Full‑Stack <span class="pill">Virtusa Consulting Services, India</span></div>
+          <div class="role">Associate Software Engineer — Java Full-Stack <span class="pill">Virtusa Consulting Services, India</span></div>
           <div class="meta">May 2022 – Jul 2023</div>
           <ul>
             <li>Built enterprise applications with Spring Boot, Angular, REST APIs; improved performance by 25%.</li>
@@ -447,7 +495,7 @@
     }
     tick();
 
-    // ===== Custom cursor & hover magnet (disabled on touch) =====
+    // ===== Custom cursor (disabled on touch) =====
     const CUR = document.getElementById('cursor');
     const RING = document.getElementById('cursorRing');
     if(isTouch){
@@ -463,17 +511,6 @@
         requestAnimationFrame(animateCursor);
       }
       animateCursor();
-
-      const hovers = [...document.querySelectorAll('a,button,.btn')];
-      hovers.forEach(el=>{
-        el.addEventListener('mousemove', e=>{
-          const r = el.getBoundingClientRect();
-          const dx = (e.clientX - (r.left + r.width/2)) / (r.width/2);
-          const dy = (e.clientY - (r.top + r.height/2)) / (r.height/2);
-          el.style.transform = `translate(${dx*3}px, ${dy*3}px)`;
-        });
-        el.addEventListener('mouseleave', ()=> el.style.transform = 'translate(0,0)');
-      });
     }
 
     // ===== Flip cards: click/tap + keyboard =====
@@ -483,23 +520,26 @@
       card.addEventListener('keydown', (e)=>{
         if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); card.classList.toggle('flipped'); }
       });
-      // Prevent hover-only flip triggering on touch (keep transform stable)
       if(isTouch){ card.classList.add('touch'); }
     });
 
     // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // ===== Mobile menu toggle =====
+    // ===== Mobile menu toggle (+ backdrop + body lock) =====
     const menuBtn = document.getElementById('menuBtn');
     const primaryNav = document.getElementById('primaryNav');
+    const backdrop = document.getElementById('menuBackdrop');
+
     function closeMenu(){
       primaryNav.classList.remove('open');
+      document.body.classList.remove('menu-open');
       menuBtn.setAttribute('aria-expanded','false');
       menuBtn.setAttribute('aria-label','Open menu');
     }
     function openMenu(){
       primaryNav.classList.add('open');
+      document.body.classList.add('menu-open');
       menuBtn.setAttribute('aria-expanded','true');
       menuBtn.setAttribute('aria-label','Close menu');
     }
@@ -510,7 +550,11 @@
       });
       primaryNav.querySelectorAll('a').forEach(a=> a.addEventListener('click', closeMenu));
       document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
-      document.addEventListener('click', (e)=>{ const within = e.target.closest('.nav'); if(!within) closeMenu(); });
+      backdrop.addEventListener('click', closeMenu);
+      document.addEventListener('click', (e)=>{
+        const withinNav = e.target.closest('.nav');
+        if(!withinNav && document.body.classList.contains('menu-open')) closeMenu();
+      });
     }
   </script>
 </body>
